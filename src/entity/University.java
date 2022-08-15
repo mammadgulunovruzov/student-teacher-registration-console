@@ -1,5 +1,11 @@
-public class  University    {
+package entity;
 
+import java.io.Serializable;
+
+public class  University  implements Serializable {
+
+
+    public static final long serialVersionUID =1;
     private String name;
 
     public University(String name) {

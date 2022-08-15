@@ -1,8 +1,18 @@
+package service;
+
+import database.DB;
+import entity.Teacher;
+import entity.University;
+import utility.InputUtility;
+import utility.StringUtility;
+
 public class TeacherService extends ManagementService{
 
 
-    public static Student[] students;
-    public static Teacher[] teachers;
+
+//
+
+
 
     public static Teacher prepareTeacher(){
         Teacher teacher = new Teacher();
@@ -12,20 +22,10 @@ public class TeacherService extends ManagementService{
         teacher.setAge(InputUtility.askInt("Enter teacher age"));
         teacher.setSalary(InputUtility.askDouble("Enter teacher salary"));
 
-        String universityName = InputUtility.askStirng("Enter University name");
+        String universityName = InputUtility.askStirng("Enter entity.University name");
         University university =  new University(universityName  );
         teacher.setUniversity(university);
 
-
-
-        int numberOfStudents = InputUtility.askInt("Enter the number of students");
-        students = new Student[numberOfStudents];
-        for (int i=0; i< students.length;i++) {
-            String studentName = InputUtility.askStirng("Enter Student name");
-            String studentSurname = InputUtility.askStirng("Enter Student surname");
-            students[i] = new Student(studentName,studentSurname);
-        }
-        teacher.setStudents(students);
 
         return teacher;
 
@@ -33,24 +33,26 @@ public class TeacherService extends ManagementService{
 
     public  void process() {
 
-        int studentOperation = InputUtility.askInt("Enter an operation:\n" +
+        int teacherOperation = InputUtility.askInt("Enter an operation:\n" +
                 "(1) for Creating a Teacher\n" +
                 "(2) for Searching a Teacher\n" +
                 "(3) for Deleting a Teacher\n" +
                 "(4) for Updating a Teacher\n" +
                 "(5) for Showing all Teacher");
-        if (studentOperation == 1) {
+        if (teacherOperation == 1) {
             register();
-
-        } else if (studentOperation == 2) {
+            DB.save();
+        } else if (teacherOperation == 2) {
             search();
-        } else if (studentOperation == 3) {
+        } else if (teacherOperation == 3) {
             delete();
+            DB.save();
 
-        } else if (studentOperation == 4) {
+        } else if (teacherOperation == 4) {
            update();
+            DB.save();
 
-        } else if (studentOperation == 5) {
+        } else if (teacherOperation == 5) {
             showAll();
 
 
@@ -64,20 +66,30 @@ public class TeacherService extends ManagementService{
     @Override
     public void register() {
         Integer numberOfTeachers = InputUtility.askInt("Enter the number of teachers");
-         teachers =  new Teacher[numberOfTeachers];
+        Teacher[] oldTeachers = DB.teachers;
+        Teacher[] newTeachers = new Teacher[numberOfTeachers];
 
-        for (int i=0; i<teachers.length;i++ ){
-            teachers[i]= prepareTeacher();
+        for (int i=0; i<numberOfTeachers;i++ ){
+            newTeachers[i]= prepareTeacher();
         }
+        Teacher[] result = new Teacher[oldTeachers.length+newTeachers.length];
+
+        System.arraycopy(oldTeachers,0, result, 0, oldTeachers.length);
+        System.arraycopy(newTeachers, 0, result, oldTeachers.length, newTeachers.length);
+
+
+        DB.teachers = result;
+
+
     }
 
     @Override
     public void showAll() {
-        if(teachers == null){
+        if(DB.teachers == null){
             System.out.println("There is no any teacher to show");
         }
-        for (int i=0; i< teachers.length;i++){
-            Teacher teacher = teachers[i]   ;
+        for (int i = 0; i< DB.teachers.length; i++){
+            Teacher teacher = DB.teachers[i]   ;
             System.out.println(i+"."+ teacher);
         }
 
@@ -88,18 +100,18 @@ public class TeacherService extends ManagementService{
         showAll();
 
         int deletedTeacher = InputUtility.askInt("Enter the number of teacher to be deleted");
-        teachers[deletedTeacher]=null;
+        DB.teachers[deletedTeacher]=null;
 
 
-        Teacher[] newTeachers =  new Teacher[teachers.length-1];
+        Teacher[] newTeachers =  new Teacher[DB.teachers.length-1];
         int j=0;
-        for (int i=0; i<teachers.length;i++){
-           if(teachers[i]!=null) {
-                newTeachers[j] = teachers[i];
+        for (int i = 0; i< DB.teachers.length; i++){
+           if(DB.teachers[i]!=null) {
+                newTeachers[j] = DB.teachers[i];
                 j++;
             }
         }
-        teachers=newTeachers;
+        DB.teachers=newTeachers;
 
 
     }
@@ -109,7 +121,7 @@ public class TeacherService extends ManagementService{
         showAll();
 
         int numberOfUpdatedTeacher = InputUtility.askInt("Enter the number of teacher to be updated");
-        Teacher updatedTeacher = teachers[numberOfUpdatedTeacher];
+        Teacher updatedTeacher = DB.teachers[numberOfUpdatedTeacher];
 
       while (true)  {
             String field = InputUtility.askStirng("Which field do you want to update: name, surname, age, salary or university");
@@ -140,30 +152,22 @@ public class TeacherService extends ManagementService{
     @Override
     public void search() {
 
-        String search = InputUtility.askStirng("Enter name || surname || age ||salary || university of a Teacher").toLowerCase();
-        for (int i =0; i<teachers.length;i++){
-            Teacher teacher = teachers[i];
-            String teacherName = teachers[i].getName();
-            String teacherSurname = teachers[i].getSurname();
-            String  teacherAge = teachers[i].getAge().toString();
-            String teacherSalary = teachers[i].getSalary().toString();
-            String  teacherUniversity = teachers[i].getUniversity().getName();
+        String search = InputUtility.askStirng("Enter name || surname || age ||salary || university of a entity.Teacher").toLowerCase();
+        for (int i = 0; i< DB.teachers.length; i++){
+            Teacher teacher = DB.teachers[i];
+            String teacherName = DB.teachers[i].getName();
+            String teacherSurname = DB.teachers[i].getSurname();
+            String  teacherAge = DB.teachers[i].getAge().toString();
+            String teacherSalary = DB.teachers[i].getSalary().toString();
+            String  teacherUniversity = DB.teachers[i].getUniversity().getName();
 
-            String teachersStudentName = null;
-            String teachersStudentSurname = null;
-            for (int j =0; j< students.length;j++){
-                teachersStudentName = students[i].getName();
-                teachersStudentSurname = students[i].getSurname();
 
-            }
 
             if (StringUtility.containsIgnoreCase(teacherName,search) ||
                 StringUtility.containsIgnoreCase(teacherSurname, search) ||
                 StringUtility.containsIgnoreCase(teacherAge, search) ||
                 StringUtility.containsIgnoreCase(teacherSalary, search) ||
-                StringUtility.containsIgnoreCase(teacherUniversity, search) ||
-                StringUtility.containsIgnoreCase(teachersStudentName, search) ||
-            StringUtility.containsIgnoreCase(teachersStudentSurname, search)){
+                StringUtility.containsIgnoreCase(teacherUniversity, search)){
                 System.out.println(i+"."+teacher);
             }
 
@@ -171,10 +175,5 @@ public class TeacherService extends ManagementService{
         }
     }
 
-    public void myMethod(int i){
 
-    }
-    public void myMethod(String str){
-
-    }
 }

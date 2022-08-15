@@ -1,8 +1,14 @@
+import database.DB;
+import service.ManagementService;
+import service.StudentService;
+import service.TeacherService;
+import utility.InputUtility;
+
 public class Main {
 
 
     public static void main(String[] args) {
-
+        DB.initialize();
         while (true) {
             int menu = InputUtility.askInt("Enter a person:\n" +
                     "(1) for Teacher \n" +

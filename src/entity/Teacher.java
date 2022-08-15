@@ -1,14 +1,16 @@
-import java.util.Arrays;
+package entity;
 
-public class Teacher {
+import java.io.Serializable;
 
+public class Teacher implements Serializable {
+
+
+    public static final long serialVersionUID =1;
     private String name;
     private  String surname;
     private Integer age;
     private Double salary;
     private University university;
-
-    private Student[] students;
 
 
 
@@ -52,13 +54,7 @@ public class Teacher {
         this.university = university;
     }
 
-    public Student[] getStudents() {
-        return students;
-    }
 
-    public void setStudents(Student[] students) {
-        this.students = students;
-    }
 
     @Override
     public String toString() {
@@ -67,7 +63,6 @@ public class Teacher {
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
                 ", salary=" + salary +
-                ", university=" + university +
-                ", students=" + Arrays.toString(students);
+                ", university=" + university;
     }
 }

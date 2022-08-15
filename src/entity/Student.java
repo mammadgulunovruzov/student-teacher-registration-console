@@ -1,4 +1,11 @@
-public class Student {
+package entity;
+
+import java.io.Serializable;
+
+public class Student implements Serializable {
+
+
+    public static final long serialVersionUID =1;
 
     private String name;
     private String surname;

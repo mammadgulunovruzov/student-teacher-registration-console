@@ -1,3 +1,5 @@
+package service;
+
 public class ManagementService {
 
     public void register() {

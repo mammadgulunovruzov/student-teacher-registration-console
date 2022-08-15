@@ -1,7 +1,15 @@
+package service;
+
+import database.DB;
+import entity.Student;
+import entity.University;
+import utility.InputUtility;
+import utility.StringUtility;
+
 public class StudentService extends ManagementService{
 
 
-    public static Student[] students;
+
 
     public  void process() {
         int studentOperation = InputUtility.askInt("Enter an operation:\n" +
@@ -12,21 +20,28 @@ public class StudentService extends ManagementService{
                 "(5) for Showing all Students");
         if (studentOperation == 1) {
             register();
-
+            DB.save();
         } else if (studentOperation == 2) {
             search();
         } else if (studentOperation == 3) {
             delete();
-
+            DB.save();
         } else if (studentOperation == 4) {
             update();
-
+            DB.save();
         } else if (studentOperation == 5) {
             showAll();
-
-
         }
+
     }
+
+
+    //Fayli update ele
+
+
+
+
+
     public static Student prepareStudent() {
         String name = InputUtility.askStirng("Enter student name");
         String surname = InputUtility.askStirng("Enter student surname");
@@ -46,25 +61,44 @@ public class StudentService extends ManagementService{
 
     public  void register(){
         int numberOfStudents = InputUtility.askInt("Enter the number of students");
-        students = new Student[numberOfStudents];
+        Student[] oldStudents = DB.students;
+        Student[] newStudents = new Student[numberOfStudents];
 
         for (int i = 0; i < numberOfStudents; i++) {
-            students[i] = prepareStudent();
+            newStudents[i] = prepareStudent();
         }
+
+        Student[] result = new Student[oldStudents.length+newStudents.length];
+
+        System.arraycopy(oldStudents,0, result, 0, oldStudents.length);
+        System.arraycopy(newStudents, 0, result, oldStudents.length, newStudents.length);
+
+
+        // OR
+
+//        for(int i=0; i<oldStudents.length;i++){
+//            result[i] = oldStudents[i];
+//        }
+//        for(int i=0; i<newStudents.length;i++){
+//            result[oldStudents.length+i] = oldStudents[i];
+//        }
+
+
+        DB.students= result;
 
 
 
     }
 
     public  void search(){
-        String search = InputUtility.askStirng("Enter name || surname || age ||scholarship || university of a Student").toLowerCase();
-        for (int i = 0; i < students.length; i++) {
-            Student student = students[i];
-            String studentName = students[i].getName();
-            String studentSurname = students[i].getSurname();
-            String studentAge = students[i].getAge().toString();
-            String studentScholarship = students[i].getScholarship().toString();
-            String studentUniversity = students[i].getUniversity().getName();
+        String search = InputUtility.askStirng("Enter name || surname || age ||scholarship || university of a entity.Student").toLowerCase();
+        for (int i = 0; i < DB.students.length; i++) {
+            Student student = DB.students[i];
+            String studentName = DB.students[i].getName();
+            String studentSurname = DB.students[i].getSurname();
+            String studentAge = DB.students[i].getAge().toString();
+            String studentScholarship = DB.students[i].getScholarship().toString();
+            String studentUniversity = DB.students[i].getUniversity().getName();
 
             if (StringUtility.containsIgnoreCase(studentName, search) ||
                     StringUtility.containsIgnoreCase(studentSurname, search) ||
@@ -82,18 +116,18 @@ public class StudentService extends ManagementService{
 
         showAll();
         int deletedStudentNumber = InputUtility.askInt("Enter the number of student to be deleted");
-        students[deletedStudentNumber] = null;
+        DB.students[deletedStudentNumber] = null;
 
-        Student [] newStudents =  new Student[students.length-1];
+        Student[] newStudents =  new Student[DB.students.length-1];
         int j=0;
-        for (int i=0; i<students.length; i++){
-            if(students[i]!=null){
-                newStudents[j]=students[i];
+        for (int i = 0; i< DB.students.length; i++){
+            if(DB.students[i]!=null){
+                newStudents[j]= DB.students[i];
                 j++;
             }
         }
 
-        students=newStudents;
+        DB.students=newStudents;
 
 
     }
@@ -103,7 +137,7 @@ public class StudentService extends ManagementService{
 
         int studentNumber = InputUtility.askInt("Enter the number of student to be updated");
 
-        Student updatedStudent = students[studentNumber];
+        Student updatedStudent = DB.students[studentNumber];
 
         while (true){
             String field = InputUtility.askStirng("Which field do you want to update: name, surname, age, scholarship or university");
@@ -133,8 +167,8 @@ public class StudentService extends ManagementService{
 
     }
     public  void showAll(){
-        for (int i = 0; i < students.length; i++) {
-            Student student = students[i];
+        for (int i = 0; i < DB.students.length; i++) {
+            Student student = DB. students[i];
             System.out.println(i+"."+student);
         }
     }
