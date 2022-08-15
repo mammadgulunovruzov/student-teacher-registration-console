@@ -5,7 +5,6 @@ public class Main {
 
 
         while (true) {
-            DB.initialize();
             int menu = InputUtility.askInt("Enter a person:\n" +
                     "(1) for Teacher \n" +
                     "(2) for Student \n" +
