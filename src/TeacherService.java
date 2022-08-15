@@ -1,7 +1,9 @@
 public class TeacherService extends ManagementService{
 
 
-    public static Student[] students;
+
+//
+
 
 
     public static Teacher prepareTeacher(){
@@ -16,16 +18,6 @@ public class TeacherService extends ManagementService{
         University university =  new University(universityName  );
         teacher.setUniversity(university);
 
-
-
-        int numberOfStudents = InputUtility.askInt("Enter the number of students");
-        students = new Student[numberOfStudents];
-        for (int i=0; i< students.length;i++) {
-            String studentName = InputUtility.askStirng("Enter Student name");
-            String studentSurname = InputUtility.askStirng("Enter Student surname");
-            students[i] = new Student(studentName,studentSurname);
-        }
-        teacher.setStudents(students);
 
         return teacher;
 
@@ -47,9 +39,11 @@ public class TeacherService extends ManagementService{
         } else if (teacherOperation == 3) {
             delete();
             DB.save();
+
         } else if (teacherOperation == 4) {
            update();
             DB.save();
+
         } else if (teacherOperation == 5) {
             showAll();
 
@@ -67,20 +61,19 @@ public class TeacherService extends ManagementService{
         Teacher[] oldTeachers = DB.teachers;
         Teacher[] newTeachers = new Teacher[numberOfTeachers];
 
-        for (int i=0; i<DB.teachers.length;i++ ){
+        for (int i=0; i<numberOfTeachers;i++ ){
             newTeachers[i]= prepareTeacher();
         }
+        Teacher[] result = new Teacher[oldTeachers.length+newTeachers.length];
 
-        Teacher[] result = new Teacher[oldTeachers.length + newTeachers.length];
-
-        System.arraycopy(oldTeachers, 0, result, 0, oldTeachers.length);
+        System.arraycopy(oldTeachers,0, result, 0, oldTeachers.length);
         System.arraycopy(newTeachers, 0, result, oldTeachers.length, newTeachers.length);
+
 
         DB.teachers = result;
 
 
     }
-
 
     @Override
     public void showAll() {
@@ -158,23 +151,15 @@ public class TeacherService extends ManagementService{
             String teacherSurname = DB.teachers[i].getSurname();
             String  teacherAge = DB.teachers[i].getAge().toString();
             String teacherSalary = DB.teachers[i].getSalary().toString();
-            String  teacherUniversity = DB.teachers[i].getUniversity().getName();
+            String  teacherUniversity =DB.teachers[i].getUniversity().getName();
 
-            String teachersStudentName = null;
-            String teachersStudentSurname = null;
-            for (int j =0; j< students.length;j++){
-                teachersStudentName = students[i].getName();
-                teachersStudentSurname = students[i].getSurname();
 
-            }
 
             if (StringUtility.containsIgnoreCase(teacherName,search) ||
                 StringUtility.containsIgnoreCase(teacherSurname, search) ||
                 StringUtility.containsIgnoreCase(teacherAge, search) ||
                 StringUtility.containsIgnoreCase(teacherSalary, search) ||
-                StringUtility.containsIgnoreCase(teacherUniversity, search) ||
-                StringUtility.containsIgnoreCase(teachersStudentName, search) ||
-            StringUtility.containsIgnoreCase(teachersStudentSurname, search)){
+                StringUtility.containsIgnoreCase(teacherUniversity, search)){
                 System.out.println(i+"."+teacher);
             }
 
@@ -182,10 +167,5 @@ public class TeacherService extends ManagementService{
         }
     }
 
-    public void myMethod(int i){
 
-    }
-    public void myMethod(String str){
-
-    }
 }

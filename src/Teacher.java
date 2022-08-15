@@ -11,8 +11,6 @@ public class Teacher implements Serializable {
     private Double salary;
     private University university;
 
-    private Student[] students;
-
 
 
     public String getName() {
@@ -55,13 +53,7 @@ public class Teacher implements Serializable {
         this.university = university;
     }
 
-    public Student[] getStudents() {
-        return students;
-    }
 
-    public void setStudents(Student[] students) {
-        this.students = students;
-    }
 
     @Override
     public String toString() {
@@ -70,7 +62,6 @@ public class Teacher implements Serializable {
                 ", surname='" + surname + '\'' +
                 ", age=" + age +
                 ", salary=" + salary +
-                ", university=" + university +
-                ", students=" + Arrays.toString(students);
+                ", university=" + university;
     }
 }

@@ -2,8 +2,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-
-
+        DB.initialize();
         while (true) {
             int menu = InputUtility.askInt("Enter a person:\n" +
                     "(1) for Teacher \n" +
