@@ -1,3 +1,11 @@
+package service;
+
+import database.DB;
+import entity.Teacher;
+import entity.University;
+import utility.InputUtility;
+import utility.StringUtility;
+
 public class TeacherService extends ManagementService{
 
 
@@ -14,7 +22,7 @@ public class TeacherService extends ManagementService{
         teacher.setAge(InputUtility.askInt("Enter teacher age"));
         teacher.setSalary(InputUtility.askDouble("Enter teacher salary"));
 
-        String universityName = InputUtility.askStirng("Enter University name");
+        String universityName = InputUtility.askStirng("Enter entity.University name");
         University university =  new University(universityName  );
         teacher.setUniversity(university);
 
@@ -80,7 +88,7 @@ public class TeacherService extends ManagementService{
         if(DB.teachers == null){
             System.out.println("There is no any teacher to show");
         }
-        for (int i=0; i< DB.teachers.length;i++){
+        for (int i = 0; i< DB.teachers.length; i++){
             Teacher teacher = DB.teachers[i]   ;
             System.out.println(i+"."+ teacher);
         }
@@ -97,7 +105,7 @@ public class TeacherService extends ManagementService{
 
         Teacher[] newTeachers =  new Teacher[DB.teachers.length-1];
         int j=0;
-        for (int i=0; i<DB.teachers.length;i++){
+        for (int i = 0; i< DB.teachers.length; i++){
            if(DB.teachers[i]!=null) {
                 newTeachers[j] = DB.teachers[i];
                 j++;
@@ -144,14 +152,14 @@ public class TeacherService extends ManagementService{
     @Override
     public void search() {
 
-        String search = InputUtility.askStirng("Enter name || surname || age ||salary || university of a Teacher").toLowerCase();
-        for (int i =0; i<DB.teachers.length;i++){
+        String search = InputUtility.askStirng("Enter name || surname || age ||salary || university of a entity.Teacher").toLowerCase();
+        for (int i = 0; i< DB.teachers.length; i++){
             Teacher teacher = DB.teachers[i];
             String teacherName = DB.teachers[i].getName();
             String teacherSurname = DB.teachers[i].getSurname();
             String  teacherAge = DB.teachers[i].getAge().toString();
             String teacherSalary = DB.teachers[i].getSalary().toString();
-            String  teacherUniversity =DB.teachers[i].getUniversity().getName();
+            String  teacherUniversity = DB.teachers[i].getUniversity().getName();
 
 
 

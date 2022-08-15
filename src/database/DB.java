@@ -1,3 +1,9 @@
+package database;
+
+import entity.Student;
+import entity.Teacher;
+import utility.FileUtility;
+
 public class DB {
 
     public static Student[] students;

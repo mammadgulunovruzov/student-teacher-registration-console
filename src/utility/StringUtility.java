@@ -1,3 +1,5 @@
+package utility;
+
 public class StringUtility {
 
     public static boolean containsIgnoreCase(String val1, String val2   ){

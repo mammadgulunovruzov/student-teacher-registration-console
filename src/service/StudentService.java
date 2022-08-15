@@ -1,3 +1,11 @@
+package service;
+
+import database.DB;
+import entity.Student;
+import entity.University;
+import utility.InputUtility;
+import utility.StringUtility;
+
 public class StudentService extends ManagementService{
 
 
@@ -83,7 +91,7 @@ public class StudentService extends ManagementService{
     }
 
     public  void search(){
-        String search = InputUtility.askStirng("Enter name || surname || age ||scholarship || university of a Student").toLowerCase();
+        String search = InputUtility.askStirng("Enter name || surname || age ||scholarship || university of a entity.Student").toLowerCase();
         for (int i = 0; i < DB.students.length; i++) {
             Student student = DB.students[i];
             String studentName = DB.students[i].getName();
@@ -110,11 +118,11 @@ public class StudentService extends ManagementService{
         int deletedStudentNumber = InputUtility.askInt("Enter the number of student to be deleted");
         DB.students[deletedStudentNumber] = null;
 
-        Student [] newStudents =  new Student[DB.students.length-1];
+        Student[] newStudents =  new Student[DB.students.length-1];
         int j=0;
-        for (int i=0; i<DB.students.length; i++){
+        for (int i = 0; i< DB.students.length; i++){
             if(DB.students[i]!=null){
-                newStudents[j]=DB.students[i];
+                newStudents[j]= DB.students[i];
                 j++;
             }
         }
@@ -160,7 +168,7 @@ public class StudentService extends ManagementService{
     }
     public  void showAll(){
         for (int i = 0; i < DB.students.length; i++) {
-            Student student =DB. students[i];
+            Student student = DB. students[i];
             System.out.println(i+"."+student);
         }
     }

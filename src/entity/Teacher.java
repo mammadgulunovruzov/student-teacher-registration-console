@@ -1,5 +1,6 @@
+package entity;
+
 import java.io.Serializable;
-import java.util.Arrays;
 
 public class Teacher implements Serializable {
 
