@@ -3,6 +3,7 @@ public class Main {
 
     public static void main(String[] args) {
 
+
         while (true) {
             int menu = InputUtility.askInt("Enter a person:\n" +
                     "(1) for Teacher \n" +
