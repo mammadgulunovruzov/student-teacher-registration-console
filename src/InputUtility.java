@@ -8,6 +8,7 @@ public class InputUtility {
     }
 
     public static Integer askInt(String title) {
+
         System.out.println(title);
         return new Scanner(System.in).nextInt();
 
